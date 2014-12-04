@@ -61,6 +61,8 @@ IF(MSVC)
 	# This option must match the settings used in your program, in particular if you
 	# are linking statically
 	OPTION( STATIC_CRT		"Link the static CRT libraries"	ON  )
+	OPTION( IGNORE_STATIC_CRT	"Ignore STATIC_CRT option"	OFF  )
+	MARK_AS_ADVANCED( IGNORE_STATIC_CRT )
 
 	# By default, libgit2 is built with WinHTTP.  To use the built-in
 	# HTTP transport, invoke CMake with the "-DWINHTTP=OFF" argument.
@@ -251,7 +253,10 @@ IF (MSVC)
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Gz")
 	ENDIF ()
 
-	IF (STATIC_CRT)
+	IF (IGNORE_STATIC_CRT)
+		SET(CRT_FLAG_DEBUG)
+		SET(CRT_FLAG_RELEASE)
+	ELSEIF (STATIC_CRT)
 		SET(CRT_FLAG_DEBUG "/MTd")
 		SET(CRT_FLAG_RELEASE "/MT")
 	ELSE()
