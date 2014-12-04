@@ -63,6 +63,8 @@ IF(MSVC)
 	# This option must match the settings used in your program, in particular if you
 	# are linking statically
 	OPTION( STATIC_CRT		"Link the static CRT libraries"	ON  )
+	OPTION( SKIP_MSVC_FLAGS		"Skip MSVC flags set here"	OFF  )
+	MARK_AS_ADVANCED( SKIP_MSVC_FLAGS )
 
 	# By default, libgit2 is built with WinHTTP.  To use the built-in
 	# HTTP transport, invoke CMake with the "-DWINHTTP=OFF" argument.
@@ -263,6 +265,7 @@ ENDIF()
 
 # Platform specific compilation flags
 IF (MSVC)
+	IF(NOT SKIP_MSVC_FLAGS)
 
 	STRING(REPLACE "/Zm1000" " " CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 
@@ -328,6 +331,8 @@ IF (MSVC)
 	SET(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 	SET(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
 	SET(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "${CMAKE_EXE_LINKER_FLAGS_MINSIZEREL}")
+
+	ENDIF() # SKIP_MSVC_FLAGS
 
 	SET(WIN_RC "src/win32/git2.rc")
 
