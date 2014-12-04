@@ -61,8 +61,6 @@ IF(MSVC)
 	# This option must match the settings used in your program, in particular if you
 	# are linking statically
 	OPTION( STATIC_CRT		"Link the static CRT libraries"	ON  )
-	OPTION( IGNORE_STATIC_CRT	"Ignore STATIC_CRT option"	OFF  )
-	MARK_AS_ADVANCED( IGNORE_STATIC_CRT )
 	OPTION( SKIP_MSVC_FLAGS		"Skip MSVC flags set here"	OFF  )
 	MARK_AS_ADVANCED( SKIP_MSVC_FLAGS )
 
@@ -256,10 +254,7 @@ IF (MSVC)
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Gz")
 	ENDIF ()
 
-	IF (IGNORE_STATIC_CRT)
-		SET(CRT_FLAG_DEBUG)
-		SET(CRT_FLAG_RELEASE)
-	ELSEIF (STATIC_CRT)
+	IF (STATIC_CRT)
 		SET(CRT_FLAG_DEBUG "/MTd")
 		SET(CRT_FLAG_RELEASE "/MT")
 	ELSE()
