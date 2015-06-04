@@ -90,8 +90,8 @@ SET(LIBGIT2_PC_LIBS "")
 
 # Installation paths
 #
-SET(BIN_INSTALL_DIR bin${NUMBITS} CACHE PATH "Where to install binaries to.")
-SET(LIB_INSTALL_DIR lib${NUMBITS} CACHE PATH "Where to install libraries to.")
+SET(BIN_INSTALL_DIR bin CACHE PATH "Where to install binaries to.")
+SET(LIB_INSTALL_DIR lib CACHE PATH "Where to install libraries to.")
 SET(INCLUDE_INSTALL_DIR include CACHE PATH "Where to install headers to.")
 
 FUNCTION(TARGET_OS_LIBRARIES target)
