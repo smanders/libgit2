@@ -10,7 +10,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && _MSC_VER < 1800
 #	include "inttypes.h"
 #else
 #	include <inttypes.h>
