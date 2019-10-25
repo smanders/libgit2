@@ -39,6 +39,7 @@ INCLUDE(FindStatNsec)
 INCLUDE(IdeSplitSources)
 INCLUDE(FeatureSummary)
 INCLUDE(EnableWarnings)
+INCLUDE(flags OPTIONAL)
 
 # Build options
 #
@@ -65,6 +66,14 @@ OPTION(DEBUG_POOL			"Enable debug pool allocator"				OFF)
 OPTION(ENABLE_WERROR			"Enable compilation with -Werror"			OFF)
 OPTION(USE_BUNDLED_ZLIB    		"Use the bundled version of zlib"			OFF)
 OPTION(DEPRECATE_HARD			"Do not include deprecated functions in the library"	OFF)
+OPTION(OPENSSL_MODULE_PATH		"Find OpenSSL in CMAKE_MODULE_PATH"			OFF)
+OPTION(ZLIB_MODULE_PATH			"Find zlib in CMAKE_MODULE_PATH"			OFF)
+OPTION(LIBSSH2_MODULE_PATH		"Find libssh2 in CMAKE_MODULE_PATH"			OFF)
+OPTION(INSTALL_LIBGIT2_CONFIG		"Install libgit2 config (pkg-config libgit2.pc)"	ON)
+MARK_AS_ADVANCED(OPENSSL_MODULE_PATH)
+MARK_AS_ADVANCED(ZLIB_MODULE_PATH)
+MARK_AS_ADVANCED(LIBSSH2_MODULE_PATH)
+MARK_AS_ADVANCED(INSTALL_LIBGIT2_CONFIG)
 
 IF (UNIX AND NOT APPLE)
 	OPTION(ENABLE_REPRODUCIBLE_BUILDS "Enable reproducible builds"				OFF)
@@ -78,6 +87,10 @@ IF(MSVC)
 	# This option must match the settings used in your program, in particular if you
 	# are linking statically
 	OPTION(STATIC_CRT		"Link the static CRT libraries"		 		 ON)
+
+	# Some MSVC flags are not compatible with what's been set externally
+	OPTION(SKIP_MSVC_FLAGS		"Skip MSVC flags set here"		 		OFF)
+	MARK_AS_ADVANCED(SKIP_MSVC_FLAGS)
 
 	# If you want to embed a copy of libssh2 into libgit2, pass a
 	# path to libssh2
@@ -112,6 +125,8 @@ ENDIF()
 
 # Platform specific compilation flags
 IF (MSVC)
+	IF (NOT SKIP_MSVC_FLAGS)
+
 	IF (STDCALL)
 		MESSAGE(FATAL_ERROR "The STDCALL option is no longer supported; libgit2 is now always built as a cdecl library.  If you're using PInvoke, please add the CallingConventions.Cdecl attribute for support.")
 	ENDIF()
@@ -191,6 +206,8 @@ IF (MSVC)
 	SET(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 	SET(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
 	SET(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "${CMAKE_EXE_LINKER_FLAGS_MINSIZEREL}")
+
+	ENDIF() # SKIP_MSVC_FLAGS
 ELSE ()
 	IF (ENABLE_REPRODUCIBLE_BUILDS)
 		SET(CMAKE_C_ARCHIVE_CREATE "<CMAKE_AR> Dqc <TARGET> <LINK_FLAGS> <OBJECTS>")
